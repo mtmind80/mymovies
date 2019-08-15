@@ -92,6 +92,7 @@ public function boot()
 Application allows only registered users. A user is logged in using basic authentication. (Laravel's middleware auth.basic)
 
 All registered users can request a list of movies and a movie details.
+See Migrations for list of users
 
 The other possible actions (add, update and delete a movie) are only allowed to admin users. (created middleware admin)
 
