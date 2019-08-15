@@ -9,7 +9,9 @@ class MovieCollectionResource extends ResourceCollection
     public function toArray($request)
     {
         return [
-            'data' => $this->collection,
+            'data' => $this->collection->transform(function($movie){
+                return new MovieResource($movie);
+            }),
         ];
     }
 

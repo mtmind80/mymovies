@@ -10,7 +10,7 @@ class Movie extends Model
         'title',
         'format',
         'length',
-        'year',
+        'release_year',
         'rating',
     ];
 

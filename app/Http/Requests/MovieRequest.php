@@ -17,7 +17,7 @@ class MovieRequest extends FormRequest
             'title'  => 'string|min:1|max:50|unique:movies',
             'format' => 'string|in:VHS,DVD,Streaming',
             'length' => 'integer|min:0|max:500',
-            'year'   => 'integer|min:1800|max:2100',
+            'release_year'   => 'integer|min:1800|max:2100',
             'rating' => 'integer|min:1|max:5',
         ];
 

@@ -10,8 +10,9 @@ class MovieResource extends JsonResource
     {
         return [
             'title'  => $this->title,
+            'format' => $this->format,
             'length' => $this->length,
-            'year'   => $this->year,
+            'release_year'   => $this->release_year,
             'rating' => $this->rating,
         ];
     }
