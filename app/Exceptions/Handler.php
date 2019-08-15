@@ -46,6 +46,25 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Exception $exception)
     {
+
+        // Handle API authentication failure:
+
+        if ($exception instanceof \Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException) {
+            return response()->json([
+                'status'  => 'error',
+                'message' => 'Invalid credentials.',
+            ], 401);
+        }
+
+        // Handle Validation failure:
+
+        if ($exception instanceof \Illuminate\Validation\ValidationException) {
+            return response()->json(array_merge([
+                'status' => 'error',
+                'errors' => $exception->validator->messages()
+            ]), 401);
+        }
+
         return parent::render($request, $exception);
     }
 }
