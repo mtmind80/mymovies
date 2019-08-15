@@ -81,9 +81,11 @@ public function boot()
 
 - Create model, request and resource controller for movies. Follow suggested Laravel naming convention.
 
-- Create seeder for movies table to feed it with several rows.
+- Create migration for movies table to feed it with several rows.
 
 - Create Resource and ResourceCollection classes for Movie model to standardize the information returned to client.
+php artisan make:resource MovieResource
+php artisan make:resource MovieCollectionResource --collection
 
 - Develop resource functions for MoviesController to return paginated list of movies (index function, 10 items per request by default) and movie details (show function).
 
