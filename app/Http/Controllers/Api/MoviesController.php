@@ -4,12 +4,14 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 
+use App\Movie;
+use GuzzleHttp\Client as GClient;
 use Illuminate\Http\Request;
 use App\Http\Requests\MovieRequest;
-
-use App\Movie;
 use App\Http\Resources\MovieResource;
+use GuzzleHttp\Exception\ClientException;
 use App\Http\Resources\MovieCollectionResource;
+
 
 class MoviesController extends Controller
 {
@@ -78,6 +80,25 @@ class MoviesController extends Controller
         if (!empty($message)) {
             $response['message'] = $message;
         }
+
+        return response($response);
+    }
+
+    public function searchTMDB(Request $request) {
+
+        $title = $request->title ?? '';
+        if ($title == ''){
+            return $this->_returnError('Item not found.');
+        }
+        $client = new GClient();
+        try {
+            $request = $client->get('https://api.themoviedb.org/3/search/movie?api_key=b721f2ca9b95f92c5e1a2cfb9a018552&query='. $title,
+                ['verify' => false]);
+        } catch (ClientException $e) {
+            return $this->_returnError('Problem with external connection.');
+        }
+
+        $response = $request->getBody()->getContents();
 
         return response($response);
     }

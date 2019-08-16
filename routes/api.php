@@ -6,6 +6,8 @@ Route::group(['middleware' => 'api.request'], function (){
     Route::group(['prefix' => 'movies', 'middleware' => 'auth.basic'], function (){
         Route::get('/', 'Api\MoviesController@index');
         Route::get('/{id}/show', 'Api\MoviesController@show');
+        Route::get('/tmdb', 'Api\MoviesController@searchTMDB');
+
 
         Route::group(['middleware' => 'admin'], function (){
             Route::post('/', 'Api\MoviesController@store');
