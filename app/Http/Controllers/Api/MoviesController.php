@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 
 use App\Movie;
-use GuzzleHttp\Client as GClient;
+use GuzzleHttp\Client;
 use Illuminate\Http\Request;
 use App\Http\Requests\MovieRequest;
 use App\Http\Resources\MovieResource;
@@ -38,7 +38,7 @@ class MoviesController extends Controller
         }
 
         return response([
-            'data'   => new MovieResource($movie),
+            'data' => new MovieResource($movie),
             'status' => 'success',
         ]);
     }
@@ -68,7 +68,7 @@ class MoviesController extends Controller
     private function _returnError($message)
     {
         return response([
-            'status'  => 'error',
+            'status' => 'error',
             'message' => $message,
         ]);
     }
@@ -84,15 +84,16 @@ class MoviesController extends Controller
         return response($response);
     }
 
-    public function searchTMDB(Request $request) {
+    public function searchTMDB(Request $request)
+    {
 
         $title = $request->title ?? '';
-        if ($title == ''){
+        if ($title == '') {
             return $this->_returnError('Item not found.');
         }
-        $client = new GClient();
+        $client = new Client();
         try {
-            $request = $client->get('https://api.themoviedb.org/3/search/movie?api_key=b721f2ca9b95f92c5e1a2cfb9a018552&query='. $title,
+            $request = $client->get('https://api.themoviedb.org/3/search/movie?api_key=b721f2ca9b95f92c5e1a2cfb9a018552&query=' . $title,
                 ['verify' => false]);
         } catch (ClientException $e) {
             return $this->_returnError('Problem with external connection.');
@@ -100,7 +101,30 @@ class MoviesController extends Controller
 
         $response = $request->getBody()->getContents();
 
-        return response($response);
+        return response($response)->header('Content-Type', 'application/json');
+    }
+
+
+    public function listTMDB(Request $request)
+    {
+
+        $id = $request->id ?? 0;
+        if ($id == 0) {
+            return $this->_returnError('Item not found.');
+        }
+        $client = new Client();
+        try {
+            $request = $client->get('https://api.themoviedb.org/3/movie/' . $id . '?api_key=b721f2ca9b95f92c5e1a2cfb9a018552',
+                ['verify' => false]);
+        } catch (ClientException $e) {
+            return $this->_returnError('Problem with external connection.');
+        }
+
+        $imageurl = "https://image.tmdb.org/t/p/w500/";
+
+        $response = $request->getBody()->getContents();
+
+        return response($response)->header('Content-Type', 'application/json');
     }
 
 }

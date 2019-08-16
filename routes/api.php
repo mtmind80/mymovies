@@ -7,6 +7,8 @@ Route::group(['middleware' => 'api.request'], function (){
         Route::get('/', 'Api\MoviesController@index');
         Route::get('/{id}/show', 'Api\MoviesController@show');
         Route::get('/tmdb', 'Api\MoviesController@searchTMDB');
+        Route::get('/{id}/tmdblist', 'Api\MoviesController@listTMDB');
+
 
 
         Route::group(['middleware' => 'admin'], function (){
