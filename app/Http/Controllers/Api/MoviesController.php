@@ -126,13 +126,16 @@ class MoviesController extends Controller
      */
     public function searchTMDB(Request $request)
     {
+        $api_key = env('TMDB_API_KEY');
+        $api_url = env('TMDB_API_URL');
+
         $title = $request->title ?? '';
         if ($title == '') {
             return $this->_returnError('Item not found.');
         }
         $client = new Client();
         try {
-            $request = $client->get('https://api.themoviedb.org/3/search/movie?api_key=b721f2ca9b95f92c5e1a2cfb9a018552&query=' . $title,
+            $request = $client->get($api_url .'search/movie?api_key='.$api_key .'&query=' . $title,
                 ['verify' => false]);
         } catch (ClientException $e) {
             return $this->_returnError('Problem with external connection.');
@@ -153,14 +156,16 @@ class MoviesController extends Controller
      */
     public function listTMDB($id = null)
     {
-
         if (!$id) {
             return $this->_returnError('Item not found.');
         }
 
+        $api_key = env('TMDB_API_KEY');
+        $api_url = env('TMDB_API_URL');
+
         $client = new Client();
         try {
-            $request = $client->get('https://api.themoviedb.org/3/movie/' . $id . '?api_key=b721f2ca9b95f92c5e1a2cfb9a018552',
+            $request = $client->get($api_url .'movie/' . $id . '?api_key='. $api_key,
                 ['verify' => false]);
         } catch (ClientException $e) {
             return $this->_returnError('Problem with external connection.');
