@@ -120,7 +120,7 @@ class MoviesController extends Controller
             return $this->_returnError('Problem with external connection.');
         }
 
-        $imageurl = "https://image.tmdb.org/t/p/w500/";
+        //@todo display image $imageurl = "https://image.tmdb.org/t/p/w500/";
 
         $response = $request->getBody()->getContents();
 
