@@ -141,7 +141,23 @@ sudo apt update
 
 sudo apt install php7.3 php7.3-common php7.3-cli php-pear php7.3-curl php7.3-dev php7.3-gd php7.3-mbstring php7.3-zip php7.3-mysql php7.3-xml php7.3-fpm libapache2-mod-php7.3 php7.3-imagick php7.3-recode php7.3-tidy php7.3-xmlrpc php7.3-intl php7.3-bcmath php7.3-bz2 php7.3-json php7.3-readline php7.3-imap 
 
-sudo a2enmod rewrite
+sudo a2enmod rewrite 
 php -v
 
+cd /var/www/
+Download the git repo
+Adjust permissions
+sudo chmod 755 -R mymovies 
+sudo chmod 777 -R mymovies/storage  
+sudo chmod 775 -R mymovies/bootstrap
+
+Create MYSQL user and db 
+mysql -uroot -p mysqlroot
+
+SIMPLE
+CREATE DATABASE movies;
+CREATE USER 'movies'@'localhost' IDENTIFIED BY '3408movies';
+
+GRANT ALL PRIVILEGES ON * . * TO 'movies'@'localhost';
+FLUSH PRIVILEGES;
 
