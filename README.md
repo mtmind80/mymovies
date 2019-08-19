@@ -117,4 +117,31 @@ Each handler for validation and unauthorized exceptions have been modified to re
 Resource classes are used when "list" or "details" are requested to modified/format the returned json object as needed to standardized it and avoid returning unneeded info and exposing table field names.
 
 
+Deployment
+Setup EC2 Resource
+Create Instance
+Create Security Group
+Create User
+mtmind / 3408EKwq#*1
+
+Prepare ubuntu for web server
+sudo apt-get update
+sudo apt install apache2
+sudo apt install mysql-server
+sudo mysql_secure_installation (
+
+first item NO)
+
+password for root
+mysqlroot
+
+mysql --version
+sudo add-apt-repository ppa:ondrej/php
+sudo apt update
+
+sudo apt install php7.3 php7.3-common php7.3-cli php-pear php7.3-curl php7.3-dev php7.3-gd php7.3-mbstring php7.3-zip php7.3-mysql php7.3-xml php7.3-fpm libapache2-mod-php7.3 php7.3-imagick php7.3-recode php7.3-tidy php7.3-xmlrpc php7.3-intl php7.3-bcmath php7.3-bz2 php7.3-json php7.3-readline php7.3-imap 
+
+sudo a2enmod rewrite
+php -v
+
 
