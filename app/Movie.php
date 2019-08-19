@@ -8,7 +8,7 @@ class Movie extends Model
 {
     protected $fillable = [
         'title',
-        'format',
+        'media_format',
         'length',
         'release_year',
         'rating',

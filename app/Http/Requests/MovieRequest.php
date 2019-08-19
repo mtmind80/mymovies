@@ -15,7 +15,7 @@ class MovieRequest extends FormRequest
     {
         $rules = [
             'title'  => 'string|min:1|max:50|unique:movies',
-            'format' => 'string|in:VHS,DVD,Streaming',
+            'media_format' => 'string|in:VHS,DVD,Streaming',
             'length' => 'integer|min:0|max:500',
             'release_year'   => 'integer|min:1800|max:2100',
             'rating' => 'integer|min:1|max:5',
