@@ -161,3 +161,12 @@ CREATE USER 'movies'@'localhost' IDENTIFIED BY '3408movies';
 GRANT ALL PRIVILEGES ON * . * TO 'movies'@'localhost';
 FLUSH PRIVILEGES;
 
+- Create vhost file
+
+- Enable vhost
+
+    sudo a2ensite vhost-name.conf
+
+- Reload apache
+
+    sudo service apache2 reload
