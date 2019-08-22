@@ -142,6 +142,10 @@ class MoviesController extends Controller
         }
 
         $response = $request->getBody()->getContents();
+$myson = (json_decode($response, true));
+$myson = $myson['results'][1]['id'];
+        print_r($myson);
+        return;
 
         return response([
             'data'   => json_decode($response, true),
