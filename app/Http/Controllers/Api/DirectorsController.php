@@ -1,38 +1,34 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Api;
 
-use App\directors;
-use Illuminate\Http\Request;
+use App\Http\Controllers\MyController;
 
+use App\Director;
 use Illuminate\Http\Request;
 use App\Http\Requests\DirectorRequest;
 use App\Http\Resources\DirectorResource;
 use App\Http\Resources\DirectorCollectionResource;
 
-class DirectorsController extends Controller
+class DirectorsController extends MyController
 {
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+
+        $orderBy = $request->order_by ?? 'id';
+
+        $directors = Director::orderBy($orderBy)->paginate(10);
+
+        return new DirectorCollectionResource($directors);
+
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
+     /**
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
@@ -40,30 +36,27 @@ class DirectorsController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        Director::create($request->all());
+        return $this->_returnSuccess('Director added.');
     }
 
     /**
-     * Display the specified resource.
-     *
-     * @param  \App\directors  $directors
-     * @return \Illuminate\Http\Response
+     * Function show
+     * Params: $id
+     * Returns a single director
      */
-    public function show(directors $directors)
+    public function show($id)
     {
-        //
+        if (!$director = Director::find($id)) {
+            return $this->_returnError('Item not found.');
+        }
+
+        return response([
+            'data' => new DirectorResource($director),
+            'status' => 'success',
+        ]);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\directors  $directors
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(directors $directors)
-    {
-        //
-    }
 
     /**
      * Update the specified resource in storage.
@@ -72,9 +65,16 @@ class DirectorsController extends Controller
      * @param  \App\directors  $directors
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, directors $directors)
+    public function update(DirectorRequest $request, $id)
     {
-        //
+        if (!$director = Director::find($id)) {
+            return $this->_returnError('Item not found.');
+        }
+
+        $director->update($request->all());
+
+        return $this->_returnSuccess('Director updated.');
+
     }
 
     /**
@@ -83,8 +83,14 @@ class DirectorsController extends Controller
      * @param  \App\directors  $directors
      * @return \Illuminate\Http\Response
      */
-    public function destroy(directors $directors)
+    public function destroy($id)
     {
-        //
+        if (!$director = Director::find($id)) {
+            return $this->_returnError('Item not found.');
+        }
+
+        $director->delete();
+
+        return $this->_returnSuccess('Director deleted.');
     }
 }

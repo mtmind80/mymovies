@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\Controller;
+use App\Http\Controllers\MyController;
 
+use Log;
 use App\Movie;
+use App\Director;
 use GuzzleHttp\Client;
 use Illuminate\Http\Request;
 use App\Http\Requests\MovieRequest;
@@ -13,7 +15,7 @@ use GuzzleHttp\Exception\ClientException;
 use App\Http\Resources\MovieCollectionResource;
 
 
-class MoviesController extends Controller
+class MoviesController extends MyController
 {
 
     /**
@@ -37,7 +39,6 @@ class MoviesController extends Controller
     public function store(MovieRequest $request)
     {
         Movie::create($request->all());
-
         return $this->_returnSuccess('Movie added.');
     }
 
@@ -91,35 +92,6 @@ class MoviesController extends Controller
     }
 
     /**
-     * Function _returnError
-     * Params: $message
-     * Returns a formatted response
-     */
-    private function _returnError($message)
-    {
-        return response([
-            'status' => 'error',
-            'message' => $message,
-        ]);
-    }
-
-    /**
-     * Function _returnSuccess
-     * Params: $message
-     * Returns a formatted response
-     */
-    private function _returnSuccess($message = null)
-    {
-        $response = ['status' => 'success'];
-
-        if (!empty($message)) {
-            $response['message'] = $message;
-        }
-
-        return response($response);
-    }
-
-    /**
      * Function searchTMDB
      * Params: Request title
      * Returns a list of movies from TMDB based on title (uses a 'like' search, and can return many movies
@@ -142,13 +114,14 @@ class MoviesController extends Controller
         }
 
         $response = $request->getBody()->getContents();
-$myson = (json_decode($response, true));
-$myson = $myson['results'][1]['id'];
-        print_r($myson);
-        return;
 
+        $TMDBimageUrl ='https://image.tmdb.org/t/p/w500/';
+        $results = (json_decode($response, true));
+        for ($x = 1; $x <= count($results['results']) -1; $x++) {
+            $results['results'][$x]['poster_path'] = $TMDBimageUrl . $results['results'][$x]['poster_path'];
+        }
         return response([
-            'data'   => json_decode($response, true),
+            'data'   => $results,
             'status' => 'success',
         ]);
     }
@@ -183,6 +156,54 @@ $myson = $myson['results'][1]['id'];
             'data'   => json_decode($response, true),
             'status' => 'success',
         ]);
+
+    }
+
+    public function director($id,$director_id = null) {
+
+        if (!$movie = Movie::find($id)) {
+            return $this->_returnError('Item not found.');
+        }
+
+        if($director_id) {
+            try {
+                // run your code here
+                if ($director = Director::find($director_id)) {
+                    $movie->director()->attach($director_id);
+                }
+            }
+            catch (exception $e) {
+                Log::error($e);
+            }
+            finally {
+                //optional code that always runs
+            }
+        }
+
+    }
+
+
+
+
+    public function destroydirector($id,$director_id = null) {
+
+        if (!$movie = Movie::find($id)) {
+            return $this->_returnError('Item not found.');
+        }
+
+        if($director_id) {
+            try {
+                if ($director = Director::find($director_id)) {
+                    $movie->director()->detach($director_id);
+                }
+            }
+            catch (exception $e) {
+                Log::error($e);
+            }
+            finally {
+                //optional code that always runs
+            }
+        }
 
     }
 

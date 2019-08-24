@@ -14,7 +14,7 @@ class Movie extends Model
         'rating',
     ];
 
-    public function directors()
+    public function director()
     {
         return $this->belongsToMany('App\Director');
     }
