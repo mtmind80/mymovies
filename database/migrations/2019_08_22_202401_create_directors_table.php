@@ -17,7 +17,14 @@ class CreateDirectorsTable extends Migration
             $table->bigIncrements('id');
             $table->string('name',180)->index();
             $table->timestamps();
+            $table->unique('name');
         });
+
+        DB::table('directors')->insert([
+            ['id' => 1, 'name' => 'Dino De Larentis'],
+        ]);
+
+
     }
 
     /**

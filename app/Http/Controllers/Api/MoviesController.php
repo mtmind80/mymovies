@@ -107,7 +107,7 @@ class MoviesController extends MyController
         }
         $client = new Client();
         try {
-            $request = $client->get($api_url .'search/movie?api_key='.$api_key .'&query=' . $title,
+            $request = $client->get($api_url . 'search/movie?api_key=' . $api_key . '&query=' . $title,
                 ['verify' => false]);
         } catch (ClientException $e) {
             return $this->_returnError('Problem with external connection.');
@@ -115,13 +115,13 @@ class MoviesController extends MyController
 
         $response = $request->getBody()->getContents();
 
-        $TMDBimageUrl ='https://image.tmdb.org/t/p/w500/';
+        $TMDBimageUrl = 'https://image.tmdb.org/t/p/w500/';
         $results = (json_decode($response, true));
-        for ($x = 1; $x <= count($results['results']) -1; $x++) {
+        for ($x = 1; $x <= count($results['results']) - 1; $x++) {
             $results['results'][$x]['poster_path'] = $TMDBimageUrl . $results['results'][$x]['poster_path'];
         }
         return response([
-            'data'   => $results,
+            'data' => $results,
             'status' => 'success',
         ]);
     }
@@ -142,7 +142,7 @@ class MoviesController extends MyController
 
         $client = new Client();
         try {
-            $request = $client->get($api_url .'movie/' . $id . '?api_key='. $api_key,
+            $request = $client->get($api_url . 'movie/' . $id . '?api_key=' . $api_key,
                 ['verify' => false]);
         } catch (ClientException $e) {
             return $this->_returnError('Problem with external connection.');
@@ -153,54 +153,57 @@ class MoviesController extends MyController
         $response = $request->getBody()->getContents();
 
         return response([
-            'data'   => json_decode($response, true),
+            'data' => json_decode($response, true),
             'status' => 'success',
         ]);
 
     }
 
-    public function director($id,$director_id = null) {
+    public function director($id, $director_id = null)
+    {
 
         if (!$movie = Movie::find($id)) {
             return $this->_returnError('Item not found.');
         }
 
-        if($director_id) {
-            try {
-                // run your code here
-                if ($director = Director::find($director_id)) {
-                    $movie->director()->attach($director_id);
+        if ($director_id) {
+            if (!$movie->director->contains($director_id)) {
+                try {
+                    // run your code here
+                    if ($director = Director::find($director_id)) {
+                        $movie->director()->attach($director_id);
+                        return $this->_returnSuccess('Director was linked to Movie.');
+                    }
+                } catch (exception $e) {
+                    Log::error($e);
+
+                } finally {
+                    //optional code that always runs
                 }
             }
-            catch (exception $e) {
-                Log::error($e);
-            }
-            finally {
-                //optional code that always runs
-            }
         }
+        return $this->_returnError('Director was not linked to Movie.');
 
     }
 
 
-
-
-    public function destroydirector($id,$director_id = null) {
+    public function destroydirector($id, $director_id = null)
+    {
 
         if (!$movie = Movie::find($id)) {
             return $this->_returnError('Item not found.');
         }
 
-        if($director_id) {
+        if ($director_id) {
             try {
                 if ($director = Director::find($director_id)) {
                     $movie->director()->detach($director_id);
+                    return $this->_returnSuccess('Director was unlinked to Movie.');
                 }
-            }
-            catch (exception $e) {
+            } catch (exception $e) {
                 Log::error($e);
-            }
-            finally {
+                return $this->_returnError('Item not updated.');
+            } finally {
                 //optional code that always runs
             }
         }
