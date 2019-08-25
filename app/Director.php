@@ -10,7 +10,7 @@ class Director extends Model
         'name',
     ];
 
-    public function movie()
+    public function movies()
     {
         return $this->belongsToMany('App\Movie');
     }

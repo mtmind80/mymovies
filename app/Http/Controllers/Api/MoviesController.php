@@ -7,6 +7,7 @@ use App\Http\Controllers\MyController;
 use Log;
 use App\Movie;
 use App\Director;
+use App\Traits\ResponseReturn;
 use GuzzleHttp\Client;
 use Illuminate\Http\Request;
 use App\Http\Requests\MovieRequest;
@@ -167,11 +168,11 @@ class MoviesController extends MyController
         }
 
         if ($director_id) {
-            if (!$movie->director->contains($director_id)) {
+            if (!$movie->directors->contains($director_id)) {
                 try {
                     // run your code here
                     if ($director = Director::find($director_id)) {
-                        $movie->director()->attach($director_id);
+                        $movie->directors()->attach($director_id);
                         return $this->_returnSuccess('Director was linked to Movie.');
                     }
                 } catch (exception $e) {
@@ -195,18 +196,22 @@ class MoviesController extends MyController
         }
 
         if ($director_id) {
-            try {
-                if ($director = Director::find($director_id)) {
-                    $movie->director()->detach($director_id);
-                    return $this->_returnSuccess('Director was unlinked to Movie.');
+            if ($movie->directors->contains($director_id)) {
+                try {
+                    if ($director = Director::find($director_id)) {
+                        $movie->directors()->detach($director_id);
+                        return $this->_returnSuccess('Director was unlinked to Movie.');
+                    }
+                } catch (exception $e) {
+                    Log::error($e);
+                    return $this->_returnError($e);
+                } finally {
+                    //optional code that always runs
                 }
-            } catch (exception $e) {
-                Log::error($e);
-                return $this->_returnError('Item not updated.');
-            } finally {
-                //optional code that always runs
+
             }
         }
+        return $this->_returnError('Item not updated.');
 
     }
 

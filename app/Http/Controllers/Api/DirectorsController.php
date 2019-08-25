@@ -6,6 +6,7 @@ use App\Http\Controllers\MyController;
 
 use App\Director;
 use Illuminate\Http\Request;
+use App\Traits\ResponseReturn;
 use App\Http\Requests\DirectorRequest;
 use App\Http\Resources\DirectorResource;
 use App\Http\Resources\DirectorCollectionResource;
