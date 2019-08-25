@@ -19,6 +19,8 @@ use App\Http\Resources\MovieCollectionResource;
 class MoviesController extends MyController
 {
 
+
+    use ResponseReturn;
     /**
      * Function index
      * Returns all movies paginate results

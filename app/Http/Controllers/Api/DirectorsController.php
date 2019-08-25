@@ -13,6 +13,8 @@ use App\Http\Resources\DirectorCollectionResource;
 
 class DirectorsController extends MyController
 {
+
+    use ResponseReturn;
     /**
      * Display a listing of the resource.
      *

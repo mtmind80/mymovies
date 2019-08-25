@@ -17,12 +17,12 @@ class DirectorRequest extends FormRequest
             'name'  => 'string|min:1|max:150|unique:directors',
         ];
 
-        if ($this->isMethod('post')) {                         // adding new movie
+        if ($this->isMethod('post')) {                         // adding new director
             foreach ($rules as & $rule) {
                 $rule .= '|required';
             }
             unset($rule);
-        } else if ($this->isMethod('patch')) {                 // updating movie
+        } else if ($this->isMethod('patch')) {                 // updating director
             if ($this->request->has('name')) {
                 $rules['name'] .= ',name'. $this->get('id');;
             }
