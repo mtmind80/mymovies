@@ -28,6 +28,6 @@ class CreateDirectorMovieTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('directors_movies');
+        Schema::dropIfExists('director_movie');
     }
 }
