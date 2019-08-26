@@ -70,8 +70,11 @@ class UsersController extends MyController
     public function update(UserRequest $request, $id)
     {
         if (!$users = User::find($id)) {
-            return $this->_returnError('Item not found.');
+            return $this->_returnError('User not found.');
         }
+
+        print_r($request->all());
+        return;
 
         $users->update($request->all());
 

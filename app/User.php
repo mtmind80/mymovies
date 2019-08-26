@@ -29,4 +29,11 @@ class User extends Authenticatable
         return $this->is_admin;
     }
 
+    /** Mutators */
+
+
+    public function setPasswordAttribute($value)
+    {
+        $this->attributes['password'] =  \Hash::make($value);
+    }
 }
