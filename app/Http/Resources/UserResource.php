@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use Illuminate\Support\Facades\Crypt;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class UserResource extends JsonResource
@@ -13,11 +14,11 @@ class UserResource extends JsonResource
             $admin ='Yes';
         }
         return [
-            'Name'  => $this->name,
-            'Email'  => $this->email,
-            'Admin'  => $admin,
-            'Full Name' => $this->full_name,
-            'ID' => $this->id,
+            'name'  => $this->name,
+            'email'  => $this->email,
+            'admin'  => $admin,
+            'full_name' => $this->full_name,
+            'id' => $this->id,
         ];
     }
 

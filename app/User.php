@@ -1,16 +1,40 @@
 <?php
 
 namespace App;
-
+use App\Traits\HashData;
+use App\Traits\Encryptable;
 use Illuminate\Notifications\Notifiable;
-use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
 class User extends Authenticatable
 {
     use Notifiable;
+    use HashData;
+    use Encryptable;
+
+    public static function boot()
+    {
+
+        static::creating(function($model) {
+            $model->password = $model->data_hash($model->password);
+        });
+        static::updating(function($model) {
+            if ($model->isDirty('passEncryptableword')) {
+                $model->password = $model->data_hash($model->password);
+            }
+        });
+
+        parent::boot();
+    }
+
+
+    protected $encryptable = [
+        'name',
+    ];
+
 
     protected $appends = ['full_name'];
+
 
     protected $fillable = [
         'name', 'email', 'password',
@@ -34,10 +58,6 @@ class User extends Authenticatable
     /** Mutators */
 
 
-    public function setPasswordAttribute($value)
-    {
-        $this->attributes['password'] =  \Hash::make($value);
-    }
 
     /* Accessors */
 
@@ -48,6 +68,6 @@ class User extends Authenticatable
      */
     public function getFullNameAttribute()
     {
-        return "{$this->name} {$this->email}";
+        return "{$this->name}";
     }
 }
