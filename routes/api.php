@@ -34,6 +34,17 @@ Route::group(['middleware' => 'api.request'], function (){
         });
     });
 
+    //Users
+    Route::group(['prefix' => 'users', 'middleware' => 'auth.basic'], function (){
+        Route::group(['middleware' => 'admin'], function (){
+            Route::get('/list/', 'Api\UsersController@index');
+            Route::get('/show/{id}', 'Api\UsersController@show');
+            Route::post('/add/', 'Api\UsersController@store');
+            Route::patch('/update/{id}', 'Api\UsersController@update');
+            Route::delete('/remove/{id}', 'Api\UsersController@destroy');
+        });
+    });
+
 });
 
 

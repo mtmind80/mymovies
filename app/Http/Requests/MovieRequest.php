@@ -14,7 +14,7 @@ class MovieRequest extends FormRequest
     public function rules()
     {
         $rules = [
-            'title'  => 'string|min:1|max:50|unique:movies',
+            'title'  => 'string|min:1|max:150',
             'media_format' => 'string|in:VHS,DVD,Streaming',
             'length' => 'integer|min:0|max:500',
             'release_year'   => 'integer|min:1800|max:2100',
@@ -26,10 +26,6 @@ class MovieRequest extends FormRequest
                 $rule .= '|required';
             }
             unset($rule);
-        } else if ($this->isMethod('patch')) {                 // updating movie
-            if ($this->request->has('title')) {
-                $rules['title'] .= ',title'. $this->get('id');;
-            }
         }
 
         return $rules;

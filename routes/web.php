@@ -12,5 +12,15 @@
 */
 
 Route::get('/', function () {
-  //  return view('welcome');
+    return view('welcome');
+//Users
+    Route::group(['prefix' => 'users'], function () {
+
+        Route::get('/', 'Api\UsersController@index');
+        Route::get('/{id}/show', 'Api\UsersController@show');
+        Route::post('/', 'Api\UsersController@store');
+        Route::patch('/{id}', 'Api\UsersController@update');
+        Route::delete('/{id}', 'Api\UsersController@destroy');
+
+    });
 });
