@@ -73,9 +73,6 @@ class UsersController extends MyController
             return $this->_returnError('User not found.');
         }
 
-        print_r($request->all());
-        return;
-
         $users->update($request->all());
 
         return $this->_returnSuccess('User updated.');

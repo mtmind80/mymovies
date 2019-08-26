@@ -10,6 +10,8 @@ class User extends Authenticatable
 {
     use Notifiable;
 
+    protected $appends = ['full_name'];
+
     protected $fillable = [
         'name', 'email', 'password',
     ];
@@ -35,5 +37,17 @@ class User extends Authenticatable
     public function setPasswordAttribute($value)
     {
         $this->attributes['password'] =  \Hash::make($value);
+    }
+
+    /* Accessors */
+
+    /**
+     * Get the user's full name.
+     *
+     * @return string
+     */
+    public function getFullNameAttribute()
+    {
+        return "{$this->name} {$this->email}";
     }
 }
